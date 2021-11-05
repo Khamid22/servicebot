@@ -1,14 +1,15 @@
 from aiogram.dispatcher import FSMContext
-from aiogram.types import Message
+from aiogram.types import Message, CallbackQuery
 
 from keyboards.default.start_keyboard import back
 from keyboards.inline.admin import Master_panel
 from keyboards.inline.menu_keyboards import categoryMenu
-from states.Master import admin_panel
-from aiogram.types import CallbackQuery
 from keyboards.default.admin_panel import admin_menu
+
+from states.Master import admin_panel
+
 from loader import dp
-import csv
+
 
 
 # Asks the password for master's panel
