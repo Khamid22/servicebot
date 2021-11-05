@@ -48,3 +48,19 @@ async def about_us(msg: Message):
 @dp.message_handler(text="Clients 👤", state=admin_panel.reservations)
 async def show_customer(msg: Message):
     await msg.delete()
+    customers = await db.all_customers()
+    for customer in customers:
+        name = customer.get("name")
+        car = customer.get("car")
+        phone_number = customer.get("phone_number")
+        service2 = customer.get("service")
+        date2 = customer.get("date")
+
+        msg = "Customer's info📝: \n"
+        msg += f"Client👤- {name}\n"
+        msg += f"Car🚗 - {car}\n"
+        msg += f"Phone-number📞 - {phone_number}\n"
+        msg += f"Service🛠 - {service2}\n"
+        msg += f"Date/time⏱ - {date2}"
+        
+        await message.answer(msg)
