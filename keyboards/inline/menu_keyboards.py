@@ -23,9 +23,6 @@ services = InlineKeyboardMarkup(
         [
             InlineKeyboardButton(text='Car maintenance 🚗', callback_data='repair')
         ],
-        [
-            InlineKeyboardButton(text='🔙 Back', callback_data='back')
-        ],
     ]
 )
 

@@ -9,13 +9,18 @@ service_menu = InlineKeyboardMarkup(
         ],
         [
             InlineKeyboardButton(text="repairing motor", callback_data="repairing motor"),
-            InlineKeyboardButton(text="balancing tiers", callback_data="balancing tiers")
+            InlineKeyboardButton(text="balancing tiers", callback_data="balancing tiers"),
         ],
 
         [
+            InlineKeyboardButton(text="Replace air filter", callback_data="Replace air filter."),
+            InlineKeyboardButton(text="Brake work", callback_data="Brake work"),
+        ],
 
+        [
+            InlineKeyboardButton(text="Battery replacement", callback_data="Battery replacement"),
+            InlineKeyboardButton(text="Oil filter ", callback_data="Oil filter ")
         ]
-
     ]
 )
 

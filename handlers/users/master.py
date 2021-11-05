@@ -1,8 +1,8 @@
 from aiogram.dispatcher import FSMContext
 from aiogram.types import Message
 
-from keyboards.default.start_keyboard import back
-from keyboards.inline.menu_keyboards import categoryMenu, reject
+from keyboards.default.start_keyboard import back, menuStart
+from keyboards.inline.menu_keyboards import reject
 from states.Master import admin_panel
 from aiogram.types import CallbackQuery
 from keyboards.default.admin_panel import admin_menu
@@ -30,17 +30,18 @@ async def password(message: Message, state: FSMContext):
         # gets back to menu
     elif secret_key == 'Back⏪':
         await message.delete()
-        await message.answer("Have a nice day sir 😎", reply_markup=categoryMenu)
+        await message.answer("Try again later.", reply_markup=menuStart)
         await state.finish()
     else:
         await message.delete()
         await message.answer('Invalid password,try again', reply_markup=back)
 
 
-@dp.message_handler(text="Back⏪")
-async def about_us(msg: Message):
+@dp.message_handler(text="Back⏪", state="*")
+async def about_us(msg: Message, state: FSMContext):
     await msg.delete()
-    await msg.answer("What service do you want to have💬: ")
+    await msg.answer("Consider leaving your feedbacks!", reply_markup=menuStart)
+    await state.finish()
 
 
 @dp.message_handler(text="Clients 👤", state=admin_panel.reservations)
@@ -62,7 +63,3 @@ async def show_customer(message: Message):
         msg += f"Date/time⏱ - {date2}"
 
         await message.answer(msg, reply_markup=reject)
-
-
-@dp.callback_query_handler(text_contains = 'reject', state='*')
-async def reject(call:CallbackQuery, state=FSMContext):
