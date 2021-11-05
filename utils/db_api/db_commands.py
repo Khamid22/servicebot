@@ -117,3 +117,4 @@ class MySQLStorage:
 
     async def delete_customer(self, user_id):
         await self.apply("delete from customers where user_id = %s", user_id)
+

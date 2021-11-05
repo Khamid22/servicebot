@@ -5,7 +5,10 @@ admin_menu = ReplyKeyboardMarkup(
         [
             KeyboardButton(text="Clients 👤"),
         ],
-
+        [
+            KeyboardButton(text='Complains 🤬'),
+            KeyboardButton(text='Feedbacks 💬'),
+        ],
         [
             KeyboardButton(text="Web-Mode 🖥")
         ],
