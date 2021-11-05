@@ -18,20 +18,12 @@ categoryMenu = InlineKeyboardMarkup(
     ],
 )
 
-services = InlineKeyboardMarkup(
-    inline_keyboard=[
-        [
-            InlineKeyboardButton(text='Car maintenance 🚗', callback_data='repair')
-        ],
-    ]
-)
-
 
 reject = InlineKeyboardMarkup(
     inline_keyboard=[
         [
             InlineKeyboardButton(text='Reject ❌', callback_data='reject')
         ]
-    ],
+    ]
 )
 

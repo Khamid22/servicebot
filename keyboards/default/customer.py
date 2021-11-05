@@ -3,11 +3,12 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 customer = ReplyKeyboardMarkup(
     keyboard=[
         [
-            KeyboardButton(text="🗣 Complain letter"),
+            KeyboardButton(text="Car maintenance 🚗"),
         ],
 
         [
-            KeyboardButton(text="✍🏻 Feedback")
+            KeyboardButton(text="✍🏻 Feedback"),
+            KeyboardButton(text="🗣 Complain letter"),
         ],
 
         [

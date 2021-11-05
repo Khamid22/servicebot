@@ -1,19 +1,17 @@
-from keyboards.default.start_keyboard import back, menuStart, cancel
+from keyboards.default.start_keyboard import menuStart, cancel
 from keyboards.inline.customers import service_menu, date, options
 from keyboards.inline.menu_keyboards import categoryMenu
 from loader import dp
-from aiogram.types import Message, CallbackQuery, ReplyKeyboardRemove
+from aiogram.types import Message, CallbackQuery
 from aiogram.dispatcher import FSMContext
 from states.customers import personalData
 from loader import Database as db
 
 
-@dp.callback_query_handler(text_contains='repair')
-async def register_user(call: CallbackQuery):
-    callback_data = call.data
-    await call.message.delete()
-    await call.message.answer("Enter your full name🧑🏼‍💼👨🏼‍💼", reply_markup=cancel)
-    await call.answer(cache_time=60)
+@dp.message_handler(text_contains='Car maintenance 🚗')
+async def register_user(msg: Message):
+    await msg.delete()
+    await msg.answer("Enter your full name🧑🏼‍💼👨🏼‍💼", reply_markup=cancel)
     await personalData.full_name.set()
 
 
