@@ -110,6 +110,10 @@ class MySQLStorage:
     async def get_customer_datas(self, user_id):
         user_info = await self.get("select * from `customers` where user_id = %s", user_id)
         return user_info
-
+    
+    async def all_customers(self):
+        customers = await self.get("select * from customers", fetch_all=Tue)
+        return customers
+    
     async def delete_customer(self, user_id):
         await self.apply("delete from customers where user_id = %s", user_id)
