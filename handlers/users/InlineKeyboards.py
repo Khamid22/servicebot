@@ -28,7 +28,6 @@ async def send(call: CallbackQuery, state: FSMContext):
         "Your inquiry has been successfully submitted✅.\nPlease wait for master's response, he will get in touch within a minute⏰. ",
         cache_time=60, show_alert=True)
 
-
     data = await state.get_data()
     name = data.get("name")
     car = data.get("car")

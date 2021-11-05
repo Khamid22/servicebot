@@ -2,13 +2,11 @@ from aiogram.dispatcher import FSMContext
 from aiogram.types import Message
 
 from keyboards.default.start_keyboard import back
-from keyboards.inline.admin import Master_panel
-from keyboards.inline.menu_keyboards import categoryMenu
+from keyboards.inline.menu_keyboards import categoryMenu, reject
 from states.Master import admin_panel
 from aiogram.types import CallbackQuery
 from keyboards.default.admin_panel import admin_menu
-from loader import dp
-import csv
+from loader import dp, Database as db
 
 
 # Asks the password for master's panel
@@ -46,5 +44,21 @@ async def about_us(msg: Message):
 
 
 @dp.message_handler(text="Clients 👤", state=admin_panel.reservations)
-async def show_customer(msg: Message):
-    await msg.delete()
+async def show_customer(message: Message):
+    await message.delete()
+    customers = await db.all_customers()
+    for customer in customers:
+        name = customer.get("name")
+        car = customer.get("car")
+        phone_number = customer.get("phone_number")
+        service2 = customer.get("service")
+        date2 = customer.get("date")
+
+        msg = "Customer's info📝: \n"
+        msg += f"Client👤- {name}\n"
+        msg += f"Car🚗 - {car}\n"
+        msg += f"Phone-number📞 - {phone_number}\n"
+        msg += f"Service🛠 - {service2}\n"
+        msg += f"Date/time⏱ - {date2}"
+
+        await message.answer(msg, reply_markup=reject)

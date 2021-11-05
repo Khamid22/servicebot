@@ -30,3 +30,11 @@ services = InlineKeyboardMarkup(
 )
 
 
+reject = InlineKeyboardMarkup(
+    inline_keyboard=[
+        [
+            InlineKeyboardButton(text='Reject ❌', callback_data='reject')
+        ]
+    ],
+)
+
