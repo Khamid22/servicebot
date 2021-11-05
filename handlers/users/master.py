@@ -25,13 +25,14 @@ async def password(message: Message, state: FSMContext):
     secret_key = message.text
     pass_key = "master007"
     if secret_key == pass_key:
-        await message.answer('The master mode has been activated 👨🏻‍🔧✅',reply_markup=admin_menu)
+        await message.answer('The master mode has been activated 👨🏻‍🔧✅: ', reply_markup=admin_menu)
+        await admin_panel.reservations.set()
         # Manipulates reserved list from customers
 
-            # gets back to menu
+        # gets back to menu
     elif secret_key == 'Back⏪':
         await message.delete()
-        await message.answer("What service do you want to have💬:", reply_markup=categoryMenu)
+        await message.answer("Have a nice day sir 😎", reply_markup=categoryMenu)
         await state.finish()
     else:
         await message.delete()
@@ -41,4 +42,9 @@ async def password(message: Message, state: FSMContext):
 @dp.message_handler(text="Back⏪")
 async def about_us(msg: Message):
     await msg.delete()
-    await msg.answer("What service do you want to have💬: ", reply_markup=categoryMenu)
+    await msg.answer("What service do you want to have💬: ")
+
+
+@dp.message_handler(text="Clients 👤", state=admin_panel.reservations)
+async def show_customer(msg: Message):
+    await msg.delete()
