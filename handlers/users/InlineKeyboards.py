@@ -22,6 +22,8 @@ async def cancel_buying(call: CallbackQuery):
 # Done button appears after customer fills the required data and adds the customer to database
 @dp.callback_query_handler(text="done", state=personalData.confirm)
 async def cancel_buying(call: CallbackQuery, state: FSMContext):
+    user_id = call.from_user.id
+    
     await call.message.edit_reply_markup(reply_markup=categoryMenu)
     await call.answer(
         "Your inquiry has been successfully submitted✅.\nPlease wait for master's response, he will get in touch within a minute⏰. ",
@@ -33,8 +35,8 @@ async def cancel_buying(call: CallbackQuery, state: FSMContext):
     phone_number = data.get("phone")
     service = data.get("service")
     date = data.get("date")
-    await db.apply("insert into customers(name, car, phone_number, service, date) values (%s, %s, %s, %s, %s)",
-                   (name, car, phone_number, service, date))
+    await db.apply("insert into customers(name, car, phone_number, service, date, user_id) values (%s, %s, %s, %s, %s, %s)",
+                   (name, car, phone_number, service, date, user_id))
     await state.finish()
 
 
