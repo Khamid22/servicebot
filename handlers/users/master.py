@@ -62,3 +62,7 @@ async def show_customer(message: Message):
         msg += f"Date/time⏱ - {date2}"
 
         await message.answer(msg, reply_markup=reject)
+
+
+@dp.callback_query_handler(text_contains = 'reject', state='*')
+async def reject(call:CallbackQuery, state=FSMContext):
