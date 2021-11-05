@@ -1,11 +1,9 @@
 from aiogram.dispatcher import FSMContext
 from aiogram.types import CallbackQuery
-from sqlalchemy.testing import db
 from states.customers import personalData
 
-import data
 from keyboards.inline.menu_keyboards import services, categoryMenu
-from loader import dp
+from loader import dp, Database as db
 from states.customers import personalData
 
 
