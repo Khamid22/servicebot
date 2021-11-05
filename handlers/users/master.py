@@ -63,3 +63,10 @@ async def show_customer(message: Message):
         msg += f"Date/time⏱ - {date2}"
 
         await message.answer(msg, reply_markup=reject)
+
+@dp.callback_query_handler(text_contains = 'reject', state='*')
+async def reject(call:CallbackQuery, state=FSMContext):
+    customer_id = call.from_user.id
+    await call.message.delte()
+    await db.delete_customer(customer_id)
+    await call.answer("Customer rejected successful")
