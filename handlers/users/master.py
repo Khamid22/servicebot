@@ -25,8 +25,7 @@ async def password(message: Message, state: FSMContext):
     secret_key = message.text
     pass_key = "master007"
     if secret_key == pass_key:
-        await message.answer('Welcome dear master!', reply_markup=admin_menu)
-        await message.answer('Master-Panel Control👨🏻‍🔧:', reply_markup=Master_panel)
+        await message.answer('The master mode has been activated 👨🏻‍🔧✅',reply_markup=admin_menu)
         # Manipulates reserved list from customers
 
             # gets back to menu
