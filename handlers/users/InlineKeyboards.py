@@ -1,6 +1,12 @@
+from aiogram.dispatcher import FSMContext
 from aiogram.types import CallbackQuery
+from sqlalchemy.testing import db
+from states.customers import personalData
+
+import data
 from keyboards.inline.menu_keyboards import services, categoryMenu
 from loader import dp
+from states.customers import personalData
 
 
 @dp.callback_query_handler(text_contains="customer")
@@ -15,16 +21,29 @@ async def cancel_buying(call: CallbackQuery):
     await call.message.answer('What service do you want to have💬: ', reply_markup=categoryMenu)
 
 
-@dp.callback_query_handler(text="done")
-async def cancel_buying(call: CallbackQuery):
+# Done button appears after customer fills the required data and adds the customer to database
+@dp.callback_query_handler(text="done", state=personalData.confirm)
+async def cancel_buying(call: CallbackQuery, state: FSMContext):
     await call.message.edit_reply_markup(reply_markup=categoryMenu)
     await call.answer(
         "Your inquiry has been successfully submitted✅.\nPlease wait for master's response, he will get in touch within a minute⏰. ",
         cache_time=60, show_alert=True)
 
+    data = await state.get_data()
+    name = data.get("name")
+    car = data.get("car")
+    phone_number = data.get("phone")
+    service = data.get("service")
+    date = data.get("date")
+    await db.apply("insert into customers(name, car, phone_number, service, date) values (%s, %s, %s, %s, %s)",
+                   (name, car, phone_number, service, date))
+    await state.finish()
+
 
 # Cancel button appears after customer fills the required data
-@dp.callback_query_handler(text="cancel")
-async def cancel_buying(call: CallbackQuery):
+@dp.callback_query_handler(text="cancel", state=personalData.confirm)
+async def cancel_buying(call: CallbackQuery, state: FSMContext):
     await call.message.edit_reply_markup(reply_markup=categoryMenu)
     await call.answer("The inquiry has been canceled ❌!", cache_time=60, show_alert=True)
+
+    await state.finish()

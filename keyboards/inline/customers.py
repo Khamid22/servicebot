@@ -19,7 +19,6 @@ service_menu = InlineKeyboardMarkup(
     ]
 )
 
-
 # setting up date and time for the customer's arrival
 date = InlineKeyboardMarkup(
     inline_keyboard=[
@@ -42,8 +41,11 @@ date = InlineKeyboardMarkup(
     ]
 )
 
-options = InlineKeyboardMarkup(row_width=2)
-done = InlineKeyboardButton(text='Done ✅', callback_data='done')
-options.insert(done)
-done = InlineKeyboardButton(text='Cancel ❌ ', callback_data='cancel')
-options.insert(done)
+options = InlineKeyboardMarkup(
+    inline_keyboard=[
+        [
+            InlineKeyboardButton(text='Done ✅', callback_data='done'),
+            InlineKeyboardButton(text='Cancel ❌ ', callback_data='cancel'),
+        ],
+    ],
+)

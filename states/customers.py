@@ -7,3 +7,4 @@ class personalData(StatesGroup):
     phone_number = State()
     service_type = State()
     date = State()
+    confirm = State()

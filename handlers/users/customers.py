@@ -2,9 +2,9 @@ from keyboards.default.start_keyboard import back
 from keyboards.inline.customers import service_menu, date, options
 from keyboards.inline.menu_keyboards import categoryMenu
 from loader import dp
-from aiogram.types import Message, CallbackQuery, Com
-from states.customers import personalData
+from aiogram.types import Message, CallbackQuery
 from aiogram.dispatcher import FSMContext
+from states.customers import personalData
 
 
 @dp.callback_query_handler(text_contains='repair')
@@ -56,7 +56,7 @@ async def answer_car(message: Message, state: FSMContext):
 @dp.message_handler(state=personalData.phone_number)
 async def contact(message: Message, state: FSMContext):
     phone_number = message.text
-    if phone_number == Command:
+    if phone_number == 'start':
         await message.answer('What service do you want to have💬:', reply_markup=categoryMenu)
         await state.finish()
     elif phone_number == 'Back⏪':
@@ -102,10 +102,5 @@ async def answer_date(call: CallbackQuery, state: FSMContext):
     msg += f"Service🛠 - {service2}\n"
     msg += f"Date/time⏱ - {date2}"
     await call.message.answer(msg, reply_markup=options)
+    await personalData.confirm.set()
     await state.finish()
-
-    await personalData.next()
-
-
-
-
