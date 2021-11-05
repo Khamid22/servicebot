@@ -102,7 +102,7 @@ class MySQLStorage:
                     return 0
 
     async def check_user_exists(self, user_id: int) -> bool:
-        return bool(await self.check("""SELECT id FROM users WHERE chat_id = %s""", user_id))
+        return bool(await self.check("""SELECT id FROM customers WHERE user_id = %s""", user_id))
 
     async def new_user(self, user_id: int):
         await self.apply("""INSERT INTO `users` (chat_id) VALUES (%s)""", user_id)
