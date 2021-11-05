@@ -5,6 +5,7 @@ from loader import dp
 from aiogram.types import Message, CallbackQuery
 from aiogram.dispatcher import FSMContext
 from states.customers import personalData
+from loader import Database as db
 
 
 @dp.callback_query_handler(text_contains='repair')
@@ -103,4 +104,31 @@ async def answer_date(call: CallbackQuery, state: FSMContext):
     msg += f"Date/time⏱ - {date2}"
     await call.message.answer(msg, reply_markup=options)
     await personalData.confirm.set()
+
+
+@dp.callback_query_handler(text="done", state=personalData.confirm)
+async def cancel_buying(call: CallbackQuery, state: FSMContext):
+    await call.message.edit_reply_markup(reply_markup=categoryMenu)
+    await call.answer(
+        "Your inquiry has been successfully submitted✅.\nPlease wait for master's response, he will get in touch within a minute⏰. ",
+        cache_time=60, show_alert=True)
+
+    data = await state.get_data()
+    name = data.get("name")
+    car = data.get("car")
+    phone_number = data.get("phone")
+    service = data.get("service")
+    date = data.get("date")
+    await db.apply("insert into customers(name, car, phone_number, service, date) values (%s, %s, %s, %s, %s)",
+                   (name, car, phone_number, service, date))
     await state.finish()
+
+
+# Cancel button appears after customer fills the required data
+@dp.callback_query_handler(text="cancel", state=personalData.confirm)
+async def cancel_buying(call: CallbackQuery, state: FSMContext):
+    await call.message.edit_reply_markup(reply_markup=categoryMenu)
+    await call.answer("The inquiry has been canceled ❌!", cache_time=60, show_alert=True)
+
+    await state.finish()
+

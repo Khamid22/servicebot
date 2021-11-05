@@ -39,8 +39,9 @@ async def cancel_buying(call: CallbackQuery, state: FSMContext):
                    (name, car, phone_number, service, date, user_id))
     await state.finish()
 
+    # Cancel button appears after customer fills the required data
 
-# Cancel button appears after customer fills the required data
+
 @dp.callback_query_handler(text="cancel", state=personalData.confirm)
 async def cancel_buying(call: CallbackQuery, state: FSMContext):
     await call.message.edit_reply_markup(reply_markup=categoryMenu)
