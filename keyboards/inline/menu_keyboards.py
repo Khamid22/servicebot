@@ -19,11 +19,13 @@ categoryMenu = InlineKeyboardMarkup(
 )
 
 
-reject = InlineKeyboardMarkup(
-    inline_keyboard=[
-        [
-            InlineKeyboardButton(text='Reject ❌', callback_data='reject')
-        ]
-    ]
-)
 
+def reject(customer_id):
+    keyboard = InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                InlineKeyboardButton(text='Reject ❌', callback_data=f'reject#{customer_id}')
+            ]
+        ]
+    )
+    return keyboard
