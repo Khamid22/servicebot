@@ -72,3 +72,5 @@ async def reject_customer(call: CallbackQuery, state=FSMContext):
     await call.message.delete()
     await db.delete_customer(customer_id)
     await call.answer("Customer rejected successfully", cache_time=60, show_alert=True)
+    await dp.bot.send_message(chat_id=customer_id, text="Your reservation has been cancelled, please re-state "
+                                                        "more accurate information")

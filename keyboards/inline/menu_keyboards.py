@@ -19,7 +19,6 @@ categoryMenu = InlineKeyboardMarkup(
 )
 
 
-
 def reject(customer_id):
     keyboard = InlineKeyboardMarkup(
         inline_keyboard=[

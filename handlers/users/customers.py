@@ -113,7 +113,8 @@ async def answer_date(call: CallbackQuery, state: FSMContext):
 async def send_info(call: CallbackQuery, state: FSMContext):
     await call.message.edit_reply_markup(reply_markup=categoryMenu)
     await call.answer(
-        "Your inquiry has been successfully submitted✅.\nPlease wait for master's response, he will get in touch within a minute⏰. ",
+        "Your inquiry has been successfully submitted✅.\nPlease wait for master's response, he will get in touch "
+        "within a minute⏰. ",
         cache_time=60, show_alert=True)
     await call.message.answer("Consider leaving your feedback!", reply_markup=menuStart)
 
