@@ -1,5 +1,5 @@
 from aiogram.dispatcher import FSMContext
-from aiogram.types import Message
+from aiogram.types import Message, message
 
 from keyboards.default.start_keyboard import back, menuStart
 from keyboards.inline.menu_keyboards import reject
@@ -75,5 +75,6 @@ async def reject_customer(call: CallbackQuery, state=FSMContext):
     await call.answer("Customer rejected successfully", cache_time=60, show_alert=True)
     try:
         await dp.bot.send_message(chat_id=customer_id, text="Sizi master reject qildi")
+
     except:
-        await message.reply(f"{customer_id} ga xabar yuborib bo'lmadi")
+        await call.message.answer(f"Can't notify the {customer_id}")
