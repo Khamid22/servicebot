@@ -133,7 +133,7 @@ async def send_info(call: CallbackQuery, state: FSMContext):
 async def cancel_sending(call: CallbackQuery, state: FSMContext):
     await call.message.edit_reply_markup(reply_markup=categoryMenu)
     await call.answer("The inquiry has been canceled ❌!", cache_time=60, show_alert=True)
-    await call.message.answer("Consider leaving your feedback!",reply_markup=menuStart)
+    await call.message.answer("Consider leaving your feedback!", reply_markup=menuStart)
 
     await state.finish()
 

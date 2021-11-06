@@ -70,4 +70,4 @@ async def reject_customer(call: CallbackQuery, state=FSMContext):
     customer_id = call.from_user.id
     await call.message.delete()
     await db.delete_customer(customer_id)
-    await call.answer("Customer rejected successful")
+    await call.answer("Customer rejected successfully", cache_time=60, show_alert=True)
