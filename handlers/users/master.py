@@ -69,8 +69,11 @@ async def show_customer(message: Message):
 @dp.callback_query_handler(text_contains='reject', state='*')
 async def reject_customer(call: CallbackQuery, state=FSMContext):
     customer_id = call.data.split('#')[1]
+
     await call.message.delete()
     await db.delete_customer(customer_id)
     await call.answer("Customer rejected successfully", cache_time=60, show_alert=True)
-    await dp.bot.send_message(chat_id=customer_id, text="Your reservation has been cancelled, please re-state "
-                                                        "more accurate information")
+    try:
+        await dp.bot.send_message(chat_id=customer_id, text="Sizi master reject qildi")
+    except:
+        await message.reply(f"{customer_id} ga xabar yuborib bo'lmadi")
