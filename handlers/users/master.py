@@ -74,7 +74,8 @@ async def reject_customer(call: CallbackQuery, state=FSMContext):
     await db.delete_customer(customer_id)
     await call.answer("Customer rejected successfully", cache_time=60, show_alert=True)
     try:
-        await dp.bot.send_message(chat_id=customer_id, text="Sizi master reject qildi")
+        await dp.bot.send_message(chat_id=customer_id, text="Apparently, your reservation has been rejected due to "
+                                                            "some mistakes, please provide more accurate data ‼️")
 
     except:
 
