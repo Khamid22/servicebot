@@ -49,6 +49,7 @@ async def show_customer(message: Message):
     await message.delete()
     customers = await db.all_customers()
     for customer in customers:
+        customer_id = customer.get("user_id")
         name = customer.get("name")
         car = customer.get("car")
         phone_number = customer.get("phone_number")
@@ -62,12 +63,12 @@ async def show_customer(message: Message):
         msg += f"Service🛠 - {service2}\n"
         msg += f"Date/time⏱ - {date2}"
 
-        await message.answer(msg, reply_markup=reject)
+        await message.answer(msg, reply_markup=reject(customer_id))
 
 
 @dp.callback_query_handler(text_contains='reject', state='*')
 async def reject_customer(call: CallbackQuery, state=FSMContext):
-    customer_id = call.from_user.id
+    customer_id = call.data.split('#')[1]
     await call.message.delete()
     await db.delete_customer(customer_id)
     await call.answer("Customer rejected successfully", cache_time=60, show_alert=True)
