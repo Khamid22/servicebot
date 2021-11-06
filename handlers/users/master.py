@@ -77,4 +77,5 @@ async def reject_customer(call: CallbackQuery, state=FSMContext):
         await dp.bot.send_message(chat_id=customer_id, text="Sizi master reject qildi")
 
     except:
-        await call.message.answer(f"Can't notify the {customer_id}")
+
+        await call.message.answer(f"Can't notify the {customer_id} id user")

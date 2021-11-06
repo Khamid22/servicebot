@@ -112,7 +112,7 @@ async def answer_date(call: CallbackQuery, state: FSMContext):
 @dp.callback_query_handler(text="done", state=personalData.confirm)
 async def send_info(call: CallbackQuery, state: FSMContext):
     await call.message.edit_reply_markup(reply_markup=categoryMenu)
-    user_id = call.message.from_user.id
+    user_id = call.from_user.id
     await call.answer(
         "Your inquiry has been successfully submitted✅.\nPlease wait for master's response, he will get in touch "
         "within a minute⏰. ",
