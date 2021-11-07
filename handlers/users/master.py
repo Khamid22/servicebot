@@ -1,5 +1,6 @@
 from aiogram.dispatcher import FSMContext
-from aiogram.types import Message, message
+from aiogram.types import Message
+import time
 
 from keyboards.default.start_keyboard import back, menuStart
 from keyboards.inline.menu_keyboards import reject
@@ -23,7 +24,11 @@ async def password(message: Message, state: FSMContext):
     secret_key = message.text
     pass_key = "master007"
     if secret_key == pass_key:
-        await message.answer('The master mode has been activated 👨🏻‍🔧✅: ', reply_markup=admin_menu)
+        photo_url = "https://hireology.com/wp-content/uploads/2017/08/38611898_m-1.jpg"
+        await message.answer_photo(photo_url, caption='The master mode has been activated ✅: ',
+                                   reply_markup=admin_menu)
+        await message.delete()
+
         await admin_panel.reservations.set()
         # Manipulates reserved list from customers
 
@@ -62,7 +67,7 @@ async def show_customer(message: Message):
         msg += f"Phone-number📞 - {phone_number}\n"
         msg += f"Service🛠 - {service2}\n"
         msg += f"Date/time⏱ - {date2}"
-
+        time.sleep(1)
         await message.answer(msg, reply_markup=reject(customer_id))
 
 

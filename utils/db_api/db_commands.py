@@ -106,7 +106,7 @@ class MySQLStorage:
 
     async def new_user(self, user_id: int):
         await self.apply("""INSERT INTO `users` (chat_id) VALUES (%s)""", user_id)
-        
+
     async def get_customer_datas(self, user_id):
         user_info = await self.get("select * from `customers` where user_id = %s", user_id)
         return user_info

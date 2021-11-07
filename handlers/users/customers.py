@@ -63,6 +63,7 @@ async def contact(message: Message, state: FSMContext):
     except ValueError:
         await message.answer("Please enter a valid phone number! ")
 
+
 @dp.callback_query_handler(state=personalData.service_type)
 async def answer_service(call: CallbackQuery, state: FSMContext):
     service_type = call.data

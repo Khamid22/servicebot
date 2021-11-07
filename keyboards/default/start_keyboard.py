@@ -4,7 +4,7 @@ menuStart = ReplyKeyboardMarkup(
     keyboard=[
         [
             KeyboardButton(text='🛠 Services'),
-            KeyboardButton(text='🔰 About us')
+            KeyboardButton(text='🔰 About us'),
         ]
     ], resize_keyboard=True
 )

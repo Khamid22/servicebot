@@ -4,11 +4,14 @@ from aiogram.dispatcher.filters.builtin import CommandStart
 
 from keyboards.default.start_keyboard import menuStart, back
 from keyboards.inline.menu_keyboards import categoryMenu
-from loader import dp
+from loader import dp, Database as db
 
 
 @dp.message_handler(CommandStart())
 async def bot_start(message: Message):
+    chat_id = message.from_user.id
+    await db.apply("insert into users(chat_id) values(%s)",
+                   chat_id)
     await message.answer(
         f"Welcome Mr {message.from_user.full_name}!\n"
         f"Fix your cars instantly😄✅", reply_markup=menuStart
