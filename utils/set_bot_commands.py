@@ -6,5 +6,6 @@ async def set_default_commands(dp):
         [
             BotCommand("start", "Run the bot"),
             BotCommand("help", "Help"),
+            BotCommand("reset", "Reset the all action"),
         ]
     )

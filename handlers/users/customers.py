@@ -1,12 +1,15 @@
 from keyboards.default.start_keyboard import cancel
+from keyboards.inline.customer_menu import menu
 from keyboards.inline.customers import service_menu, date, options
 from keyboards.inline.menu_keyboards import categoryMenu
 from loader import dp
-from aiogram.types import Message, CallbackQuery
+from aiogram.types import Message, CallbackQuery, ReplyKeyboardRemove
 from aiogram.dispatcher import FSMContext
 from states.customers import personalData
 from loader import Database as db
 
+photo_url = "https://previews.123rf.com/images/belchonock/belchonock1709/belchonock170900423/85866608-interface-of" \
+            "-modern-car-diagnostic-program-on-engine-background-car-service-concept-.jpg "
 
 @dp.callback_query_handler(text_contains='fix')
 async def register_user(call: CallbackQuery):
@@ -20,7 +23,8 @@ async def answer_fullname(message: Message, state: FSMContext):
     name = message.text
     if name == 'Cancel':
         await message.delete()
-        await message.answer("The process has been canceled❌ ", reply_markup=categoryMenu)
+
+        await message.answer_photo(photo_url, caption="The process has been canceled❌ ", reply_markup=categoryMenu)
         await state.finish()
     else:
         await state.update_data(
@@ -42,7 +46,7 @@ async def answer_car(message: Message, state: FSMContext):
         await state.update_data(
             {"car": car}
         )
-        await message.answer("Your phone number ☎?: ")
+        await message.answer("Your phone number ☎?: ", reply_markup=ReplyKeyboardRemove(True))
         await personalData.phone_number.set()
 
 
@@ -81,7 +85,6 @@ async def answer_service(call: CallbackQuery, state: FSMContext):
 
 @dp.callback_query_handler(state=personalData.date)
 async def answer_date(call: CallbackQuery, state: FSMContext):
-
     date1 = call.data
     if date1 == 'Cancel':
         await call.message.delete()
@@ -106,13 +109,12 @@ async def answer_date(call: CallbackQuery, state: FSMContext):
         msg += f"Service🛠 - {service2}\n"
         msg += f"Date/time⏱ - {date2}"
         await call.message.answer(msg, reply_markup=options)
-
         await personalData.confirm.set()
 
 
 @dp.callback_query_handler(text="done", state=personalData.confirm)
 async def send_info(call: CallbackQuery, state: FSMContext):
-    await call.message.edit_reply_markup(reply_markup=categoryMenu)
+    await call.message.edit_reply_markup(reply_markup=menu)
     user_id = call.from_user.id
     await call.answer(
         "Your inquiry has been successfully submitted✅.\nPlease wait for master's response, he will get in touch "
@@ -124,16 +126,15 @@ async def send_info(call: CallbackQuery, state: FSMContext):
     phone_number = data.get("phone")
     service = data.get("service")
     date = data.get("date")
-    await db.apply("insert into customers(name, car, phone_number, service, date, user_id) values (%s, %s, %s, %s, %s, %s)",
-                   (name, car, phone_number, service, date, user_id))
+    await db.apply(
+        "insert into customers(name, car, phone_number, service, date, user_id) values (%s, %s, %s, %s, %s, %s)",
+        (name, car, phone_number, service, date, user_id))
     await state.finish()
 
 
 # Cancel button appears after customer fills the required data
 @dp.callback_query_handler(text="cancel", state=personalData.confirm)
 async def cancel_sending(call: CallbackQuery, state: FSMContext):
-    await call.message.edit_reply_markup(reply_markup=categoryMenu)
+    await call.message.edit_caption(reply_markup=menu)
     await call.answer("The inquiry has been canceled ❌!", cache_time=60, show_alert=True)
-
     await state.finish()
-

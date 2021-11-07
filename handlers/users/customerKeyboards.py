@@ -26,6 +26,7 @@ async def back(call: CallbackQuery, state: FSMContext):
 
     await call.message.answer_photo(photo_url, caption=f"Welcome Mr {call.message.from_user.full_name}!\n"
                                                        'What service do you want to have💬:', reply_markup=categoryMenu)
+    await state.finish()
 
 
 @dp.message_handler(text_contains='✍🏻 Feedback', state=Letter.feedback)
