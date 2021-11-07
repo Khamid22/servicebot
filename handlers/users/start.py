@@ -1,10 +1,11 @@
-from aiogram.types import Message
-
+from aiogram.types import Message, CallbackQuery
+from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.builtin import CommandStart
-
-from keyboards.default.start_keyboard import menuStart, back
-from keyboards.inline.menu_keyboards import categoryMenu
+from keyboards.inline.menu_keyboards import categoryMenu, back
 from loader import dp, Database as db
+
+photo_url = "https://previews.123rf.com/images/belchonock/belchonock1709/belchonock170900423/85866608-interface-of" \
+                "-modern-car-diagnostic-program-on-engine-background-car-service-concept-.jpg "
 
 
 @dp.message_handler(CommandStart())
@@ -12,24 +13,15 @@ async def bot_start(message: Message):
     chat_id = message.from_user.id
     await db.apply("insert into users(chat_id) values(%s)",
                    chat_id)
-    await message.answer(
-        f"Welcome Mr {message.from_user.full_name}!\n"
-        f"Fix your cars instantly😄✅", reply_markup=menuStart
-    )
-
-
-@dp.message_handler(text_contains="🛠 Services", )
-async def select_category(message: Message):
-    photo_url = "https://previews.123rf.com/images/belchonock/belchonock1709/belchonock170900423/85866608-interface-of" \
-                "-modern-car-diagnostic-program-on-engine-background-car-service-concept-.jpg "
     await message.delete()
-    await message.answer_photo(photo_url, caption='What service do you want to have💬:', reply_markup=categoryMenu)
+    await message.answer_photo(photo_url, caption=f"Welcome Mr {message.from_user.full_name}!\n"
+                                                  'What service do you want to have💬:', reply_markup=categoryMenu)
 
 
-@dp.message_handler(text="🔰 About us")
-async def about_us(message: Message):
-    await message.delete()
-    await message.answer(
+@dp.callback_query_handler(text="abouts")
+async def about_us(call: CallbackQuery):
+    await call.message.delete()
+    await call.message.answer(
         "Welcome dear users 🙂 \n     \nThis bot was created to help you get an instant car service within a minute. "
         "Here is a list of commands and short guidance about using this bot😁😁.\n     \n/start - starts the bot\n    "
         " \nCustomer👨🏼‍💼 - for those who need a master's help\n      \nMaster👨🏻‍🔧 - for master seeking more "
@@ -40,7 +32,13 @@ async def about_us(message: Message):
         reply_markup=back)
 
 
-@dp.message_handler(text="Back⏪")
-async def about_us(msg: Message):
-    await msg.delete()
-    await msg.answer("What service do you want to have💬:", reply_markup=categoryMenu)
+@dp.callback_query_handler(text="back", state='*')
+async def about_us(call: CallbackQuery):
+    await call.message.delete()
+    await call.message.answer_photo(photo_url, caption="What service do you want to have💬:", reply_markup=categoryMenu)
+
+
+@dp.callback_query_handler(text="cancel", state='*')
+async def about_us(call: CallbackQuery, state: FSMContext):
+    await call.message.delete()
+    await call.message.answer_photo(photo_url, caption="What service do you want to have💬:", reply_markup=categoryMenu)

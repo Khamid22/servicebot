@@ -13,9 +13,19 @@ categoryMenu = InlineKeyboardMarkup(
         ],
         [
             InlineKeyboardButton(text='🖇Share',
-                                 switch_inline_query='\n 🚗🛠 Reach out car services within a second!🤩🤩')
+                                 switch_inline_query='\n 🚗🛠 Reach out car services within a second!🤩🤩'),
+
+            InlineKeyboardButton(text='🔰 About us', callback_data='abouts'),
         ]
     ],
+)
+
+back = InlineKeyboardMarkup(
+    inline_keyboard=[
+        [
+            InlineKeyboardButton(text="Back⏪", callback_data='back'),
+        ],
+    ]
 )
 
 

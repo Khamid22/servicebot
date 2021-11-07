@@ -1,4 +1,4 @@
-from keyboards.default.start_keyboard import menuStart, cancel
+from keyboards.default.start_keyboard import cancel
 from keyboards.inline.customers import service_menu, date, options
 from keyboards.inline.menu_keyboards import categoryMenu
 from loader import dp
@@ -8,10 +8,10 @@ from states.customers import personalData
 from loader import Database as db
 
 
-@dp.message_handler(text_contains='Car maintenance 🚗')
-async def register_user(msg: Message):
-    await msg.delete()
-    await msg.answer("Enter your full name🧑🏼‍💼👨🏼‍💼", reply_markup=cancel)
+@dp.callback_query_handler(text_contains='fix')
+async def register_user(call: CallbackQuery):
+    await call.message.delete()
+    await call.message.answer("Enter your full name🧑🏼‍💼👨🏼‍💼", reply_markup=cancel)
     await personalData.full_name.set()
 
 
@@ -20,7 +20,7 @@ async def answer_fullname(message: Message, state: FSMContext):
     name = message.text
     if name == 'Cancel':
         await message.delete()
-        await message.answer("The process has been canceled❌ ", reply_markup=menuStart)
+        await message.answer("The process has been canceled❌ ", reply_markup=categoryMenu)
         await state.finish()
     else:
         await state.update_data(
@@ -36,7 +36,7 @@ async def answer_car(message: Message, state: FSMContext):
     car = message.text
     if car == 'Cancel':
         await message.delete()
-        await message.answer("The process has been canceled❌ ", reply_markup=menuStart)
+        await message.answer("The process has been canceled❌ ", reply_markup=categoryMenu)
         await state.finish()
     else:
         await state.update_data(
@@ -52,7 +52,7 @@ async def contact(message: Message, state: FSMContext):
         phone_number = int(message.text)
         if phone_number == 'Cancel':
             await message.delete()
-            await message.answer("The process has been canceled❌ ", reply_markup=menuStart)
+            await message.answer("The process has been canceled❌ ", reply_markup=categoryMenu)
             await state.finish()
         else:
             await state.update_data(
@@ -69,7 +69,7 @@ async def answer_service(call: CallbackQuery, state: FSMContext):
     service_type = call.data
     if service_type == 'Cancel':
         await call.message.delete()
-        await call.message.answer("The process has been canceled❌ ", reply_markup=menuStart)
+        await call.message.answer("The process has been canceled❌ ", reply_markup=categoryMenu)
         await state.finish()
     else:
         await state.update_data(
@@ -85,7 +85,7 @@ async def answer_date(call: CallbackQuery, state: FSMContext):
     date1 = call.data
     if date1 == 'Cancel':
         await call.message.delete()
-        await call.message.answer("The process has been canceled❌ ", reply_markup=menuStart)
+        await call.message.answer("The process has been canceled❌ ", reply_markup=categoryMenu)
         await state.finish()
     else:
         await state.update_data(
@@ -118,7 +118,6 @@ async def send_info(call: CallbackQuery, state: FSMContext):
         "Your inquiry has been successfully submitted✅.\nPlease wait for master's response, he will get in touch "
         "within a minute⏰. ",
         cache_time=60, show_alert=True)
-    await call.message.answer("Consider leaving your feedback!", reply_markup=menuStart)
     data = await state.get_data()
     name = data.get("name")
     car = data.get("car")
@@ -135,7 +134,6 @@ async def send_info(call: CallbackQuery, state: FSMContext):
 async def cancel_sending(call: CallbackQuery, state: FSMContext):
     await call.message.edit_reply_markup(reply_markup=categoryMenu)
     await call.answer("The inquiry has been canceled ❌!", cache_time=60, show_alert=True)
-    await call.message.answer("Consider leaving your feedback!", reply_markup=menuStart)
 
     await state.finish()
 

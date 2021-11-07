@@ -1,7 +1,7 @@
 from aiogram.types import CallbackQuery, Message
 
-from keyboards.default.customer import customer
-from keyboards.default.start_keyboard import menuStart
+from keyboards.inline.customer_menu import menu
+from keyboards.inline.menu_keyboards import categoryMenu
 from loader import dp
 from states.feedback import Letter
 from aiogram.dispatcher import FSMContext
@@ -15,16 +15,17 @@ async def user(call: CallbackQuery, state: FSMContext):
     await call.message.delete()
     await call.message.answer_photo(photo_url, caption='<i>The customer mode has been activated ✅</i>'
                                                        f'\n   \n'
-                                                       f'<b>Customer ID: {customerID}</b>', reply_markup=customer)
+                                                       f'<b>Customer ID: {customerID}</b>', reply_markup=menu)
     await state.finish()
 
 
-@dp.message_handler(text_contains='Back', state='*')
-async def back(msg: Message, state: FSMContext):
-    await msg.delete()
-    await msg.answer("Tip 💬: Fill out every required spaces precisely in order to receive quick responses",
-                     reply_markup=menuStart)
-    await state.finish()
+@dp.callback_query_handler(text_contains='back', state='*')
+async def back(call: CallbackQuery, state: FSMContext):
+    photo_url = "https://previews.123rf.com/images/belchonock/belchonock1709/belchonock170900423/85866608-interface-of" \
+                "-modern-car-diagnostic-program-on-engine-background-car-service-concept-.jpg"
+
+    await call.message.answer_photo(photo_url, caption=f"Welcome Mr {call.message.from_user.full_name}!\n"
+                                                       'What service do you want to have💬:', reply_markup=categoryMenu)
 
 
 @dp.message_handler(text_contains='✍🏻 Feedback', state=Letter.feedback)
