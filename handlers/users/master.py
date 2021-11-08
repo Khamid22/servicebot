@@ -3,10 +3,10 @@ from aiogram.types import Message
 import time
 
 from keyboards.default.admin_panel import returns_back
-from keyboards.inline.admin_panel import admin_menu, get_back
+from keyboards.inline.admin_panel import admin_menu
 from keyboards.inline.menu_keyboards import reject, categoryMenu
 from states.Master import admin_panel
-from aiogram.types import CallbackQuery
+from aiogram.types import CallbackQuery, ReplyKeyboardRemove
 from loader import dp, Database as db
 
 
@@ -25,6 +25,8 @@ async def password(message: Message, state: FSMContext):
     pass_key = "master007"
     await message.delete()
     if secret_key == pass_key:
+        await message.answer("Loading...", reply_markup=ReplyKeyboardRemove(True))
+        time.sleep(1)
         photo_url = "https://hireology.com/wp-content/uploads/2017/08/38611898_m-1.jpg"
         await message.answer_photo(photo_url, caption='The master mode has been activated ✅: ',
                                    reply_markup=admin_menu)
@@ -52,7 +54,7 @@ async def about_us(call: CallbackQuery, state: FSMContext):
 @dp.callback_query_handler(text="clients", state=admin_panel.reservations)
 async def show_customer(call: CallbackQuery, state: FSMContext):
     await call.message.delete()
-    await call.message.answer("List of recent customers: ")
+    await call.message.answer("List of recent customers: ", reply_markup=returns_back)
     customers = await db.all_customers()
     for customer in customers:
         customer_id = customer.get("user_id")

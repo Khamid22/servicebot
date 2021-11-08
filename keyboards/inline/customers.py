@@ -1,5 +1,22 @@
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
+#Car category
+car_category = InlineKeyboardMarkup(
+    inline_keyboard=[
+        [
+
+            InlineKeyboardButton(text="Van 🚐", callback_data='Van 🚐'),
+            InlineKeyboardButton(text="Truck 🚚", callback_data='Truck 🚚'),
+            InlineKeyboardButton(text="Coupe 🚗", callback_data='Coupe 🚗'),
+        ],
+        [
+            InlineKeyboardButton(text='Pickup 🛻', callback_data="Pickup 🛻"),
+            InlineKeyboardButton(text='Compact suv 🚙', callback_data='Compact suv 🚙'),
+            InlineKeyboardButton(text='Electric car 🚘', callback_data='Electric car 🚘')
+        ]
+    ]
+)
+
 # Available number of services for the customer
 service_menu = InlineKeyboardMarkup(
     inline_keyboard=[

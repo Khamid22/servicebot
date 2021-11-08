@@ -1,6 +1,6 @@
 from keyboards.default.start_keyboard import cancel
 from keyboards.inline.customer_menu import menu
-from keyboards.inline.customers import service_menu, date, options
+from keyboards.inline.customers import service_menu, date, options, car_category
 from keyboards.inline.menu_keyboards import categoryMenu
 from loader import dp
 from aiogram.types import Message, CallbackQuery, ReplyKeyboardRemove
@@ -10,6 +10,7 @@ from loader import Database as db
 
 photo_url = "https://previews.123rf.com/images/belchonock/belchonock1709/belchonock170900423/85866608-interface-of" \
             "-modern-car-diagnostic-program-on-engine-background-car-service-concept-.jpg "
+
 
 @dp.callback_query_handler(text_contains='fix')
 async def register_user(call: CallbackQuery):
@@ -30,23 +31,24 @@ async def answer_fullname(message: Message, state: FSMContext):
         await state.update_data(
             {"name": name}
         )
-        await message.answer("Car category 🚗?: ")
+        await message.answer("Car category 🚗?: ", reply_markup=car_category)
 
         await personalData.car.set()
 
 
-@dp.message_handler(state=personalData.car)
-async def answer_car(message: Message, state: FSMContext):
-    car = message.text
+@dp.callback_query_handler(state=personalData.car)
+async def answer_car(call:CallbackQuery, state: FSMContext):
+    car = call.data
     if car == 'Cancel':
-        await message.delete()
-        await message.answer("The process has been canceled❌ ", reply_markup=categoryMenu)
+        await call.message.delete()
+        await call.message.answer("The process has been canceled❌ ", reply_markup=categoryMenu)
+        await call.answer(cache_time=60)
         await state.finish()
     else:
         await state.update_data(
             {"car": car}
         )
-        await message.answer("Your phone number ☎?: ", reply_markup=ReplyKeyboardRemove(True))
+        await call.message.answer("Your phone number ☎?: ", reply_markup=ReplyKeyboardRemove(True))
         await personalData.phone_number.set()
 
 
