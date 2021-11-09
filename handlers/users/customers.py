@@ -15,7 +15,8 @@ photo_url = "https://previews.123rf.com/images/belchonock/belchonock1709/belchon
 @dp.callback_query_handler(text_contains='fix')
 async def register_user(call: CallbackQuery):
     await call.message.delete()
-    await call.message.answer("Enter your full name🧑🏼‍💼👨🏼‍💼", reply_markup=cancel)
+    await call.message.answer("<b>Enter your full name🧑🏼‍💼👨🏼‍💼</b>\n"
+                              "<i>Ex: Mukhammadjonov Khamidullo", reply_markup=cancel)
     await personalData.full_name.set()
 
 
@@ -48,7 +49,8 @@ async def answer_car(call:CallbackQuery, state: FSMContext):
         await state.update_data(
             {"car": car}
         )
-        await call.message.answer("Your phone number ☎?: ", reply_markup=ReplyKeyboardRemove(True))
+        await call.message.answer("<b>Your phone number ☎?: </b> \n"
+                                  "<i>Ex: +998(xx)-xxx-xx-xx", reply_markup=ReplyKeyboardRemove(True))
         await personalData.phone_number.set()
 
 
@@ -140,3 +142,5 @@ async def cancel_sending(call: CallbackQuery, state: FSMContext):
     await call.message.edit_caption(reply_markup=menu)
     await call.answer("The inquiry has been canceled ❌!", cache_time=60, show_alert=True)
     await state.finish()
+
+

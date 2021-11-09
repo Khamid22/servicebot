@@ -101,12 +101,6 @@ class MySQLStorage:
                 except mysql_errors.Error:
                     return 0
 
-    async def check_user_exists(self, user_id: int) -> bool:
-        return bool(await self.check("""SELECT id FROM users WHERE chat_id = %s""", user_id))
-
-    async def new_user(self, user_id: int):
-        await self.apply("""INSERT INTO `users` (chat_id) VALUES (%s)""", user_id)
-
     async def get_customer_datas(self, user_id):
         user_info = await self.get("select * from `customers` where user_id = %s", user_id)
         return user_info
@@ -118,3 +112,6 @@ class MySQLStorage:
     async def delete_customer(self, user_id):
         await self.apply("delete from customers where user_id = %s", user_id)
 
+    async def get_phone(self, user_id):
+        phone_number = await self.get("select phone_number from customers where user_id = %s", user_id)
+        return phone_number

@@ -15,3 +15,11 @@ cancel = ReplyKeyboardMarkup(
         ],
     ], resize_keyboard=True, one_time_keyboard=True
 )
+
+register = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(text='📱Registration', request_contact=True)
+        ]
+    ], resize_keyboard=True, one_time_keyboard=True
+)

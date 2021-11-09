@@ -8,7 +8,7 @@ menu = InlineKeyboardMarkup(
 
         [
             InlineKeyboardButton(text="✍🏻 Feedback", callback_data='feedback'),
-            InlineKeyboardButton(text="🗣 Complain letter", callback_data='complain'),
+            InlineKeyboardButton(text="☎️ Contact", callback_data='contact'),
         ],
 
         [
