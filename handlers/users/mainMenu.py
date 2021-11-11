@@ -42,4 +42,12 @@ async def back_menu(call: CallbackQuery, state: FSMContext):
     await mainmenu.main_menu.set()
 
 
-@dp.callback_query_handler(text_contains='')
+@dp.callback_query_handler(text_contains='feedback', state=mainmenu.main_menu)
+async def feedbacks(call: CallbackQuery, state: FSMContext):
+    await Letter.feedback.set()
+
+
+@dp.message_handler(state=Letter.feedback)
+async def copy_to_channel(message: Message, state: FSMContext):
+    await message.copy_to(-1001782072708)
+    await state.finish()
