@@ -100,7 +100,7 @@ class MySQLStorage:
                     return cursor.rowcount
                 except mysql_errors.Error:
                     return 0
-
+# Customers table
     async def get_customer_datas(self, user_id):
         user_info = await self.get("select * from `customers` where user_id = %s", user_id)
         return user_info
@@ -109,9 +109,10 @@ class MySQLStorage:
         customers = await self.get("select * from customers", fetch_all=True)
         return customers
 
-    async def delete_customer(self, user_id):
-        await self.apply("delete from customers where user_id = %s", user_id)
+# Users table
+    async def delete_user(self, chat_id):
+        await self.apply("delete from users where chat_id = %s", chat_id)
 
-    async def get_phone(self, user_id):
-        phone_number = await self.get("select phone_number from customers where user_id = %s", user_id)
-        return phone_number
+    async def check_user(self, chat_id):
+        check = bool(await self.check("select phone_number from users where chat_id =%s", chat_id))
+        return check
