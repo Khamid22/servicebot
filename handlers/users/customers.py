@@ -68,21 +68,20 @@ async def answer_car(call: CallbackQuery, state: FSMContext):
 
 @dp.message_handler(state=personalData.phone_number)
 async def contact(message: Message, state: FSMContext):
-    try:
-        phone_number = int(message.text)
-        await message.delete()
-        chat_id = message.chat.id
-        message_id = message.message_id - 1
-        await bot.delete_message(chat_id=chat_id, message_id=message_id)
-        await state.update_data(
-        {"phone": phone_number}
+
+    phone_number = message.text
+    await message.delete()
+    chat_id = message.chat.id
+    message_id = message.message_id - 1
+    await bot.delete_message(chat_id=chat_id, message_id=message_id)
+    await state.update_data(
+    {"phone": phone_number}
             )
-        await message.answer(f'<b>🚸 Step 4</b> of 5\n  \n'
+    await message.answer(f'<b>🚸 Step 4</b> of 5\n  \n'
                               f'<i>😊 What service do you want?:  </i>\n  \n'
                               f'<i>✍🏻 Example: Cruise control</i>', reply_markup=service_menu)
-        await personalData.service_type.set()
-    except ValueError:
-        await message.answer("Please enter a valid phone number! ")
+    await personalData.service_type.set()
+
 
 
 @dp.callback_query_handler(state=personalData.service_type)

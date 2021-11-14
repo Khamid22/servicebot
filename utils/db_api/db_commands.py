@@ -101,6 +101,7 @@ class MySQLStorage:
                 except mysql_errors.Error:
                     return 0
 # Customers table
+
     async def get_customer_datas(self, user_id):
         user_info = await self.get("select * from `customers` where user_id = %s", user_id)
         return user_info

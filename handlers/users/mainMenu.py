@@ -1,4 +1,5 @@
 from aiogram.types import CallbackQuery, Message
+
 from keyboards.inline.menu_keyboards import categoryMenu, back
 from loader import dp, bot
 from states.feedback import Letter
@@ -25,7 +26,7 @@ async def about_us(call: CallbackQuery, state: FSMContext):
     await state.finish()
 
 
-@dp.callback_query_handler(text_contains='back', state='*')
+@dp.callback_query_handler(text='back', state='*')
 async def back_menu(call: CallbackQuery, state: FSMContext):
     try:
         await call.message.delete()
@@ -42,12 +43,34 @@ async def back_menu(call: CallbackQuery, state: FSMContext):
     await mainmenu.main_menu.set()
 
 
-@dp.callback_query_handler(text_contains='feedback', state=mainmenu.main_menu)
+@dp.callback_query_handler(text='feedback', state='*')
 async def feedbacks(call: CallbackQuery, state: FSMContext):
+    try:
+        await call.message.delete()
+        chat_id = call.message.chat.id
+        message_id = call.message.message_id - 1
+        await bot.delete_message(chat_id=chat_id, message_id=message_id)
+    except:
+        pass
+    await call.message.answer("""<b>You can write your feedback about the quality of master's work here: </b> \n"""
+                              f"   \n <i>Customer ID: {call.from_user.id}</i>", reply_markup=back)
     await Letter.feedback.set()
 
 
 @dp.message_handler(state=Letter.feedback)
 async def copy_to_channel(message: Message, state: FSMContext):
-    await message.copy_to(-1001782072708)
-    await state.finish()
+    await message.forward(-1001782072708)
+    try:
+        await message.delete()
+        chat_id = message.chat.id
+        message_id = message.message_id - 1
+        await bot.delete_message(chat_id=chat_id, message_id=message_id)
+    except:
+        pass
+    customerID = message.from_user.id
+    await message.answer_photo(photo_url, caption=f"<b>Customer ID : {customerID}\n"
+                                                  f"Welcome {message.from_user.full_name}\n</b>"
+                                                  "  \n"
+                                                  "<i>The customer mode is activated </i>", reply_markup=categoryMenu)
+    await mainmenu.main_menu.set()
+
