@@ -100,20 +100,34 @@ class MySQLStorage:
                     return cursor.rowcount
                 except mysql_errors.Error:
                     return 0
-# Customers table
 
+    # Customers table:
+
+    # ----------------------Gets customer data according to the user_id ------------------------------
     async def get_customer_datas(self, user_id):
         user_info = await self.get("select * from `customers` where user_id = %s", user_id)
         return user_info
 
+    # ----------------------Selects all customers from the database ----------------------------------
     async def all_customers(self):
         customers = await self.get("select * from customers", fetch_all=True)
         return customers
 
-# Users table
+    # ----------------------Calls the data filled out by the master----------------------------------
+    async def all_masters(self):
+        masters = await self.get('select * from masters', fetch_all=True)
+        return masters
+
+    # -----------------------Cancels Reservation and deletes from database----------------------------
+    async def cancel_reservation(self, user_id):
+        await self.apply("delete from customers where user_id=%s", user_id)
+
+    # ----------------------Manipulates registered users----------------------------------
+    # user can delete his own account from the database
     async def delete_user(self, chat_id):
         await self.apply("delete from users where chat_id = %s", chat_id)
 
+    # bot checks weather user is authorized to use the service
     async def check_user(self, chat_id):
         check = bool(await self.check("select phone_number from users where chat_id =%s", chat_id))
         return check

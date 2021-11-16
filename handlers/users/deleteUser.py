@@ -6,16 +6,27 @@ from states.delete import master
 from states.mainmenu import mainmenu
 
 from keyboards.inline.menu_keyboards import categoryMenu
-from loader import dp, Database as db
+from loader import dp, Database as db, bot
 
 
+# ---Deleting ACCOUNT ----
 @dp.callback_query_handler(text='delete', state=mainmenu.main_menu)
 async def delete_account(call: CallbackQuery, state: FSMContext):
-    await call.message.delete()
+    # tries to delete all previous message if there are no messages to delete it will ignore
+    try:
+        await call.message.delete()
+        chat_id = call.message.chat.id
+        message_id = call.message.message_id
+        for i in range(message_id - 1, 100, -1):
+            await bot.delete_message(chat_id=chat_id, message_id=i)
+    except:
+        pass
+
     await call.message.answer("<b>🚮 DO YOU REALLY WANT TO DELETE YOUR ACCOUNT?</b>"
                               "\n    \n"
                               "<i>CHANGES ARE IRREVERSIBLE AND ALL YOUR DATA WILL BE DELETED ❗️</i>",
-                              reply_markup=answer)
+                              reply_markup=answer)  # --- requires user's confirmation ---
+
     await call.answer(cache_time=60)
     await master.delete.set()
 
@@ -31,7 +42,7 @@ async def confirm(call: CallbackQuery, state: FSMContext):
     await state.finish()
 
 
-# User cancel the process and gets back to the main menu
+# Cancels the process and gets back to the main menu
 @dp.callback_query_handler(text='cancel', state=master.delete)
 async def cancels(call: CallbackQuery, state: FSMContext):
     await call.message.delete()
@@ -40,6 +51,6 @@ async def cancels(call: CallbackQuery, state: FSMContext):
     customerID = call.from_user.id
 
     await call.message.answer_photo(photo_url, caption='<i>The customer mode has been activated ✅</i>'
-                                                  f'\n   \n'
-                                                  f'<b>Customer ID: {customerID}</b>', reply_markup=categoryMenu)
+                                                       f'\n   \n'
+                                                       f'<b>Customer ID: {customerID}</b>', reply_markup=categoryMenu)
     await mainmenu.main_menu.set()

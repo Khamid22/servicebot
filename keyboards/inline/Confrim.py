@@ -8,3 +8,11 @@ answer = InlineKeyboardMarkup(
         ],
     ]
 )
+
+call = InlineKeyboardMarkup(
+    inline_keyboard=[
+        [
+            InlineKeyboardButton(text="Call", callback_data="call")
+        ]
+    ]
+)

@@ -12,13 +12,16 @@ photo_url = "https://previews.123rf.com/images/belchonock/belchonock1709/belchon
             "-modern-car-diagnostic-program-on-engine-background-car-service-concept-.jpg "
 
 
+# ---- Car Service -----
 @dp.callback_query_handler(text_contains='fix', state=mainmenu.main_menu)
 async def register_user(call: CallbackQuery):
+    # tries to delete all previous message if there are no messages to delete it will ignore
     try:
         await call.message.delete()
         chat_id = call.message.chat.id
-        message_id = call.message.message_id - 1
-        await bot.delete_message(chat_id=chat_id, message_id=message_id)
+        message_id = call.message.message_id
+        for i in range(message_id - 1, 100, -1):
+            await bot.delete_message(chat_id=chat_id, message_id=i)
     except:
         pass
 
@@ -29,13 +32,16 @@ async def register_user(call: CallbackQuery):
     await personalData.full_name.set()
 
 
+# Asks customers name and proceeds to the next question
 @dp.message_handler(state=personalData.full_name)
 async def answer_fullname(message: Message, state: FSMContext):
+    # tries to delete all previous message if there are no messages to delete it will ignore
     try:
         await message.delete()
         chat_id = message.chat.id
-        message_id = message.message_id - 1
-        await bot.delete_message(chat_id=chat_id, message_id=message_id)
+        message_id = message.message_id
+        for i in range(message_id - 1, 100, -1):
+            await bot.delete_message(chat_id=chat_id, message_id=i)
     except:
         pass
     name = message.text
@@ -47,13 +53,16 @@ async def answer_fullname(message: Message, state: FSMContext):
     await personalData.car.set()
 
 
+# asks customer what category of car does he/she drive
 @dp.callback_query_handler(state=personalData.car)
 async def answer_car(call: CallbackQuery, state: FSMContext):
+    # tries to delete all previous message if there are no messages to delete it will ignore
     try:
         await call.message.delete()
         chat_id = call.message.chat.id
-        message_id = call.message.message_id - 1
-        await bot.delete_message(chat_id=chat_id, message_id=message_id)
+        message_id = call.message.message_id
+        for i in range(message_id - 1, 100, -1):
+            await bot.delete_message(chat_id=chat_id, message_id=i)
     except:
         pass
     car = call.data
@@ -66,14 +75,19 @@ async def answer_car(call: CallbackQuery, state: FSMContext):
     await personalData.phone_number.set()
 
 
+# asks customer his/her phone number
 @dp.message_handler(state=personalData.phone_number)
 async def contact(message: Message, state: FSMContext):
-
+    # tries to delete all previous message if there are no messages to delete it will ignore
+    try:
+        await message.delete()
+        chat_id = message.chat.id
+        message_id = message.message_id
+        for i in range(message_id - 1, 100, -1):
+            await bot.delete_message(chat_id=chat_id, message_id=i)
+    except:
+        pass
     phone_number = message.text
-    await message.delete()
-    chat_id = message.chat.id
-    message_id = message.message_id - 1
-    await bot.delete_message(chat_id=chat_id, message_id=message_id)
     await state.update_data(
     {"phone": phone_number}
             )
@@ -82,16 +96,17 @@ async def contact(message: Message, state: FSMContext):
                               f'<i>✍🏻 Example: Cruise control</i>', reply_markup=service_menu)
     await personalData.service_type.set()
 
-
-
+# asks what service to be provided
 @dp.callback_query_handler(state=personalData.service_type)
 async def answer_service(call: CallbackQuery, state: FSMContext):
     service_type = call.data
+    # tries to delete all previous message if there are no messages to delete it will ignore
     try:
         await call.message.delete()
         chat_id = call.message.chat.id
-        message_id = call.message.message_id - 1
-        await bot.delete_message(chat_id=chat_id, message_id=message_id)
+        message_id = call.message.message_id
+        for i in range(message_id - 1, 100, -1):
+            await bot.delete_message(chat_id=chat_id, message_id=i)
     except:
         pass
     await state.update_data(
@@ -104,20 +119,23 @@ async def answer_service(call: CallbackQuery, state: FSMContext):
     await personalData.date.set()
 
 
+# ask to choose appropriate date/time
 @dp.callback_query_handler(state=personalData.date)
 async def answer_date(call: CallbackQuery, state: FSMContext):
+    # tries to delete all previous message if there are no messages to delete it will ignore
     try:
         await call.message.delete()
         chat_id = call.message.chat.id
-        message_id = call.message.message_id - 1
-        await bot.delete_message(chat_id=chat_id, message_id=message_id)
+        message_id = call.message.message_id
+        for i in range(message_id - 1, 100, -1):
+            await bot.delete_message(chat_id=chat_id, message_id=i)
     except:
         pass
     date1 = call.data
     await state.update_data(
             {"date": date1}
         )
-
+    # Collects all filled out information by the user in one place and waits for the user's confirmation
     data = await state.get_data()
     name = data.get("name")
     car = data.get("car")
@@ -134,13 +152,16 @@ async def answer_date(call: CallbackQuery, state: FSMContext):
     await personalData.confirm.set()
 
 
+# if user confirms the data , it will be sent to the database where car master can get access to
 @dp.callback_query_handler(text="done", state=personalData.confirm)
 async def send_info(call: CallbackQuery, state: FSMContext):
+    # tries to delete all previous message if there are no messages to delete it will ignore
     try:
         await call.message.delete()
         chat_id = call.message.chat.id
-        message_id = call.message.message_id - 1
-        await bot.delete_message(chat_id=chat_id, message_id=message_id)
+        message_id = call.message.message_id
+        for i in range(message_id - 1, 100, -1):
+            await bot.delete_message(chat_id=chat_id, message_id=i)
     except:
         pass
     user_id = call.from_user.id
@@ -148,6 +169,7 @@ async def send_info(call: CallbackQuery, state: FSMContext):
         "Your inquiry has been successfully submitted✅.\nPlease wait for master's response, he will get in touch "
         "within a minute⏰. ",
         cache_time=60, show_alert=True)
+    # inserting collecting data from memory into table(customers)
     data = await state.get_data()
     name = data.get("name")
     car = data.get("car")
@@ -172,8 +194,9 @@ async def cancel_sending(call: CallbackQuery, state: FSMContext):
     try:
         await call.message.delete()
         chat_id = call.message.chat.id
-        message_id = call.message.message_id - 1
-        await bot.delete_message(chat_id=chat_id, message_id=message_id)
+        message_id = call.message.message_id
+        for i in range(message_id - 1, 100, -1):
+            await bot.delete_message(chat_id=chat_id, message_id=i)
     except:
         pass
     await call.answer("The inquiry has been canceled ❌!", cache_time=60, show_alert=True)
