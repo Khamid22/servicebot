@@ -37,15 +37,7 @@ async def about_us(call: CallbackQuery, state: FSMContext):
 # Get's back to main menu (back button)
 @dp.callback_query_handler(text='back', state='*')
 async def back_menu(call: CallbackQuery, state: FSMContext):
-    # tries to delete all previous message if there are no messages to delete it will ignore
-    try:
-        await call.message.delete()
-        chat_id = call.message.chat.id
-        message_id = call.message.message_id
-        for i in range(message_id - 1, 100, -1):
-            await bot.delete_message(chat_id=chat_id, message_id=i)
-    except:
-        pass
+    await call.message.delete()
     customerID = call.from_user.id
     await call.message.answer_photo(photo_url, caption=f"<b>Customer ID : {customerID}\n"
                                                        f"Welcome {call.from_user.full_name}\n</b>"
@@ -59,14 +51,7 @@ async def back_menu(call: CallbackQuery, state: FSMContext):
 @dp.callback_query_handler(text='feedback', state='*')
 async def feedbacks(call: CallbackQuery, state: FSMContext):
     # tries to delete all previous message if there are no messages to delete it will ignore
-    try:
-        await call.message.delete()
-        chat_id = call.message.chat.id
-        message_id = call.message.message_id
-        for i in range(message_id - 1, 100, -1):
-            await bot.delete_message(chat_id=chat_id, message_id=i)
-    except:
-        pass
+    await call.message.delete()
     await call.message.answer("""<b>You can write your feedback about the quality of master's work here: </b> \n"""
                               f"   \n <i>Customer ID: {call.from_user.id}</i>", reply_markup=back)
     await Letter.feedback.set()
@@ -81,7 +66,7 @@ async def copy_to_channel(message: Message, state: FSMContext):
         await message.delete()
         chat_id = message.chat.id
         message_id = message.message_id
-        for i in range(message_id - 1, 100, -1):
+        for i in range(message_id - 1, 2, -1):
             await bot.delete_message(chat_id=chat_id, message_id=i)
     except:
         pass

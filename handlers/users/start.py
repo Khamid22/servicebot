@@ -4,7 +4,6 @@ from aiogram.dispatcher.filters.builtin import CommandStart
 
 from keyboards.inline.menu_keyboards import categoryMenu
 from states.mainmenu import mainmenu
-from keyboards.default.start_keyboard import register
 from loader import dp, Database as db, bot
 
 photo_url = "https://previews.123rf.com/images/belchonock/belchonock1709/belchonock170900423/85866608-interface-of" \
@@ -19,7 +18,7 @@ async def bot_start(message: Message, state: FSMContext):
         await message.delete()
         chat_id = message.chat.id
         message_id = message.message_id
-        for i in range(message_id - 1, 100, -1):
+        for i in range(message_id - 1, 2, -1):
             await bot.delete_message(chat_id=chat_id, message_id=i)
     except:
         pass
@@ -39,7 +38,7 @@ async def bot_start(message: Message, state: FSMContext):
             await message.delete()
             chat_id = message.chat.id
             message_id = message.message_id
-            for i in range(message_id - 1, 100, -1):
+            for i in range(message_id - 1, 2, -1):
                 await bot.delete_message(chat_id=chat_id, message_id=i)
         except:
             pass
@@ -61,7 +60,7 @@ async def get_contact(message: Message, state: FSMContext):
         await message.delete()
         chat_id = message.chat.id
         message_id = message.message_id
-        for i in range(message_id - 1, 100, -1):
+        for i in range(message_id - 1, 2, -1):
             await bot.delete_message(chat_id=chat_id, message_id=i)
     except:
         pass

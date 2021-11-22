@@ -12,16 +12,7 @@ from loader import dp, Database as db, bot
 # ---Deleting ACCOUNT ----
 @dp.callback_query_handler(text='delete', state=mainmenu.main_menu)
 async def delete_account(call: CallbackQuery, state: FSMContext):
-    # tries to delete all previous message if there are no messages to delete it will ignore
-    try:
-        await call.message.delete()
-        chat_id = call.message.chat.id
-        message_id = call.message.message_id
-        for i in range(message_id - 1, 100, -1):
-            await bot.delete_message(chat_id=chat_id, message_id=i)
-    except:
-        pass
-
+    await call.message.delete()
     await call.message.answer("<b>🚮 DO YOU REALLY WANT TO DELETE YOUR ACCOUNT?</b>"
                               "\n    \n"
                               "<i>CHANGES ARE IRREVERSIBLE AND ALL YOUR DATA WILL BE DELETED ❗️</i>",

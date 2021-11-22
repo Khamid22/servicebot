@@ -131,3 +131,15 @@ class MySQLStorage:
     async def check_user(self, chat_id):
         check = bool(await self.check("select phone_number from users where chat_id =%s", chat_id))
         return check
+
+    async def list_of_services(self):
+        list_of_service = await self.get('select * from services', fetch_all=True)
+        return list_of_service
+
+    async def list_of_cars(self):
+        list_of_cars = await self.get('select * from cars', fetch_all=True)
+        return list_of_cars
+
+    async def list_of_days(self):
+        list_of_days = await self.get('select * from date', fetch_all=True)
+        return list_of_days

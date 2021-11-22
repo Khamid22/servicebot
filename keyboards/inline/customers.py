@@ -1,67 +1,32 @@
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from loader import Database as db
+
 
 #Car category
-car_category = InlineKeyboardMarkup(
-    inline_keyboard=[
-        [
+async def cars():
+    keyboard = InlineKeyboardMarkup(row_width=3)
+    car_categories = await db.list_of_cars()
+    for car in car_categories:
+        keyboard.insert(InlineKeyboardButton(car.get("car_category"), callback_data=f"settings_car{car.get('id')}"))
+    return keyboard
 
-            InlineKeyboardButton(text="Van 🚐", callback_data='Van 🚐'),
-            InlineKeyboardButton(text="Truck 🚚", callback_data='Truck 🚚'),
-            InlineKeyboardButton(text="Coupe 🚗", callback_data='Coupe 🚗'),
-        ],
-        [
-            InlineKeyboardButton(text='Pickup 🛻', callback_data="Pickup 🛻"),
-            InlineKeyboardButton(text='Compact suv 🚙', callback_data='Compact suv 🚙'),
-            InlineKeyboardButton(text='Electric car 🚘', callback_data='Electric car 🚘')
-        ]
-    ]
-)
 
 # Available number of services for the customer
-service_menu = InlineKeyboardMarkup(
-    inline_keyboard=[
-        [
-            InlineKeyboardButton(text="tuning", callback_data="tuning"),
-            InlineKeyboardButton(text="cruise control", callback_data="cruise control")
-        ],
-        [
-            InlineKeyboardButton(text="repairing motor", callback_data="repairing motor"),
-            InlineKeyboardButton(text="balancing tiers", callback_data="balancing tiers"),
-        ],
+async def services_keyboard():
+    keyboard = InlineKeyboardMarkup(row_width=2)
+    list_services = await db.list_of_services()
+    for service in list_services:
+        keyboard.insert(InlineKeyboardButton(service.get("name"), callback_data=f"settings_service{service.get('id')}"))
+    return keyboard
 
-        [
-            InlineKeyboardButton(text="Replace air filter", callback_data="Replace air filter."),
-            InlineKeyboardButton(text="Brake work", callback_data="Brake work"),
-        ],
-
-        [
-            InlineKeyboardButton(text="Battery replacement", callback_data="Battery replacement"),
-            InlineKeyboardButton(text="Oil filter ", callback_data="Oil filter ")
-        ]
-    ]
-)
 
 # setting up date and time for the customer's arrival
-date = InlineKeyboardMarkup(
-    inline_keyboard=[
-        [
-            InlineKeyboardButton(text="Monday, 9:00-18:00", callback_data="Monday, 9:00-18:00"),
-            InlineKeyboardButton(text="Tuesday, 11:00-18:00", callback_data="Tuesday, 11:00-18:00")
-        ],
-
-        [
-            InlineKeyboardButton(text="Wednesday, 9:00-16:00", callback_data="Wednesday, 9:00-16:00"),
-            InlineKeyboardButton(text="Thursday, 10:00-18:00", callback_data="Thursday, 10:00-18:00"),
-        ],
-        [
-            InlineKeyboardButton(text="Friday, 10:00-18:00", callback_data="Friday, 10:00-18:00"),
-            InlineKeyboardButton(text="Saturday, 9:00-13:00", callback_data="Saturday, 9:00-13:00"),
-        ],
-        [
-            InlineKeyboardButton(text='Sunday, 10:00-17:00', callback_data='Sunday, 10:00-17:00')
-        ]
-    ]
-)
+async def dates():
+    keyboard = InlineKeyboardMarkup(row_width=3)
+    week = await db.list_of_days()
+    for day in week:
+        keyboard.insert(InlineKeyboardButton(day.get("date/time"), callback_data=f"settings_date{day.get('id')}"))
+    return keyboard
 
 options = InlineKeyboardMarkup(
     inline_keyboard=[
